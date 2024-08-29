@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { MemoNone, BASE_FEE } from "stellar-sdk";
+import { MemoNone, BASE_FEE } from "@stellar/stellar-sdk";
 import { useDispatch } from "react-redux";
 
-import { PaymentFormData } from "types/types.d";
+import { PaymentFormData } from "types/types";
 import { resetSendTxAction } from "ducks/sendTx";
 import { lumensFromStroops } from "helpers/stroopConversion";
 import { CreateTransaction } from "./CreateTransaction";

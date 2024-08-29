@@ -12,11 +12,12 @@ import {
 
 import { LabelAndValue } from "components/LabelAndValue";
 
+import { AppDispatch } from "config/store";
 import { getMemoTypeText } from "helpers/getMemoTypeText";
 import { logEvent } from "helpers/tracking";
 import { sendTxAction } from "ducks/sendTx";
 import { useRedux } from "hooks/useRedux";
-import { ActionStatus, AuthType, PaymentFormData } from "types/types.d";
+import { ActionStatus, AuthType, PaymentFormData } from "types/types";
 
 import { AccountIsUnsafe } from "./WarningMessages/AccountIsUnsafe";
 
@@ -37,7 +38,7 @@ export const ConfirmTransaction = ({
 }: ConfirmTransactionProps) => {
   const { sendTx, settings } = useRedux("sendTx", "keyStore", "settings");
   const { status, errorString } = sendTx;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     logEvent("send: saw confirmation screen");

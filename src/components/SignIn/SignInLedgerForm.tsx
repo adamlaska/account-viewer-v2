@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
-import styled from "styled-components";
+import { styled } from "styled-components";
 import { Button, InfoBlock, Loader, TextLink } from "@stellar/design-system";
 import { getCatchError } from "@stellar/frontend-helpers";
-import { KeyType } from "@stellar/wallet-sdk";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 
 import { BipPathInput } from "components/BipPathInput";
@@ -12,14 +11,14 @@ import { ErrorMessage } from "components/ErrorMessage";
 import { WalletModalContent } from "components/WalletModalContent";
 
 import { defaultStellarBipPath } from "constants/settings";
+import { AppDispatch } from "config/store";
 import { fetchAccountAction, resetAccountAction } from "ducks/account";
-import { storeKeyAction } from "ducks/keyStore";
 import { updateSettingsAction } from "ducks/settings";
 import { fetchLedgerStellarAddressAction } from "ducks/wallet/ledger";
 import { logEvent } from "helpers/tracking";
 import { useErrorMessage } from "hooks/useErrorMessage";
 import { useRedux } from "hooks/useRedux";
-import { ActionStatus, AuthType, ModalPageProps } from "types/types.d";
+import { ActionStatus, AuthType, ModalPageProps } from "types/types";
 
 const InlineLoadingEl = styled.div`
   width: 100%;
@@ -35,7 +34,7 @@ const InlineLoadingEl = styled.div`
 // Note: need to be on https to test Ledger
 
 export const SignInLedgerForm = ({ onClose }: ModalPageProps) => {
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -98,17 +97,10 @@ export const SignInLedgerForm = ({ onClose }: ModalPageProps) => {
         search: location.search,
       });
       dispatch(updateSettingsAction({ authType: AuthType.LEDGER }));
-      dispatch(
-        storeKeyAction({
-          publicKey: ledgerData!.publicKey,
-          keyType: KeyType.ledger,
-          path: ledgerBipPath,
-        }),
-      );
     }
   }, [
     isAuthenticated,
-    ledgerData,
+    ledgerData?.publicKey,
     ledgerBipPath,
     dispatch,
     navigate,

@@ -2,11 +2,12 @@ import { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Button, InfoBlock } from "@stellar/design-system";
-import { KeyType } from "@stellar/wallet-sdk";
+import { KeyType } from "@stellar/typescript-wallet-sdk-km";
 
 import { WalletModalContent } from "components/WalletModalContent";
 import { ErrorMessage } from "components/ErrorMessage";
 
+import { AppDispatch } from "config/store";
 import { fetchAccountAction, resetAccountAction } from "ducks/account";
 import { storeKeyAction } from "ducks/keyStore";
 import { updateSettingsAction } from "ducks/settings";
@@ -14,11 +15,11 @@ import { fetchAlbedoStellarAddressAction } from "ducks/wallet/albedo";
 import { logEvent } from "helpers/tracking";
 import { useErrorMessage } from "hooks/useErrorMessage";
 import { useRedux } from "hooks/useRedux";
-import { ActionStatus, AuthType, ModalPageProps } from "types/types.d";
+import { ActionStatus, AuthType, ModalPageProps } from "types/types";
 
 export const SignInAlbedoForm = ({ onClose }: ModalPageProps) => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const location = useLocation();
 
   const { walletAlbedo, account } = useRedux("walletAlbedo", "account");

@@ -2,16 +2,16 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import LedgerApi from "@ledgerhq/hw-app-str";
 import TransportWebUSB from "@ledgerhq/hw-transport-webusb";
 import { getCatchError } from "@stellar/frontend-helpers";
-import { ActionStatus, RejectMessage, WalletInitialState } from "types/types.d";
+import { ActionStatus, RejectMessage, WalletInitialState } from "types/types";
 
 export const fetchLedgerStellarAddressAction = createAsyncThunk<
-  { publicKey: string },
+  { publicKey: string; bipPath: string },
   { ledgerBipPath: string; transport: TransportWebUSB },
   { rejectValue: RejectMessage }
 >(
   "walletLedger/fetchLedgerStellarAddressAction",
   async ({ ledgerBipPath, transport }, { rejectWithValue }) => {
-    const result = { publicKey: "" };
+    const result = { publicKey: "", bipPath: ledgerBipPath };
     try {
       const ledgerApi = new LedgerApi(transport);
       const response = await ledgerApi.getPublicKey(ledgerBipPath);

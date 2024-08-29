@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import moment from "moment";
 import { Layout, Heading2, TextLink, Table } from "@stellar/design-system";
 import { NATIVE_ASSET_CODE } from "constants/settings";
+import { AppDispatch } from "config/store";
 import { fetchLiquidityPoolTxAction } from "ducks/liquidityPoolTx";
 import { getNetworkConfig } from "helpers/getNetworkConfig";
 import { formatAmount } from "helpers/formatAmount";
@@ -11,7 +12,7 @@ import {
   LiquidityPoolToken,
   AssetType,
   LiquidityPoolAccountTransaction,
-} from "types/types.d";
+} from "types/types";
 
 export const LiquidityPoolTransactions = () => {
   const { account, liquidityPoolTx, settings } = useRedux(
@@ -22,7 +23,7 @@ export const LiquidityPoolTransactions = () => {
   const accountId = account?.data?.id;
   const lpTransactions = liquidityPoolTx.data;
 
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     if (accountId) {

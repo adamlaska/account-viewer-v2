@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import StellarSdk from "stellar-sdk";
+import { Horizon } from "@stellar/stellar-sdk";
 import { RootState } from "config/store";
 import { settingsSelector } from "ducks/settings";
 import { getClaimableBalances } from "helpers/getClaimableBalances";
@@ -10,7 +10,7 @@ import {
   RejectMessage,
   ClaimableBalancesInitialState,
   ClaimableBalance,
-} from "types/types.d";
+} from "types/types";
 
 export const fetchClaimableBalancesAction = createAsyncThunk<
   {
@@ -23,7 +23,7 @@ export const fetchClaimableBalancesAction = createAsyncThunk<
   async (publicKey, { rejectWithValue, getState }) => {
     const { isTestnet } = settingsSelector(getState());
     const networkConfig = getNetworkConfig(isTestnet);
-    const server = new StellarSdk.Server(networkConfig.url);
+    const server = new Horizon.Server(networkConfig.url);
 
     let data: ClaimableBalance[] = [];
 

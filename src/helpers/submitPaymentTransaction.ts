@@ -1,17 +1,15 @@
-import StellarSdk, { Transaction } from "stellar-sdk";
+import { Transaction, Horizon } from "@stellar/stellar-sdk";
 import { getErrorString } from "helpers/getErrorString";
 import { getNetworkConfig } from "helpers/getNetworkConfig";
 import { store } from "config/store";
 import { signTransaction } from "helpers/keyManager";
 import { signLedgerTransaction } from "helpers/signLedgerTransaction";
 import { signTrezorTransaction } from "helpers/signTrezorTransaction";
-import { AuthType } from "types/types.d";
+import { AuthType } from "types/types";
 
 export const submitPaymentTransaction = async (transaction: Transaction) => {
-  const { settings, keyStore } = store.getState();
-  const server = new StellarSdk.Server(
-    getNetworkConfig(settings.isTestnet).url,
-  );
+  const { settings, keyStore, walletLedger, walletTrezor } = store.getState();
+  const server = new Horizon.Server(getNetworkConfig(settings.isTestnet).url);
 
   try {
     let signedTransaction: Transaction;
@@ -25,9 +23,29 @@ export const submitPaymentTransaction = async (transaction: Transaction) => {
     // So we need to trigger the signing "directly" from the action, passing it
     // to the `wallet-sdk` fails because it's going through different layers.
     if (settings.authType === AuthType.LEDGER) {
-      signedTransaction = await signLedgerTransaction(transaction, keyStore);
+      if (walletLedger.data?.publicKey && walletLedger.data?.bipPath) {
+        signedTransaction = await signLedgerTransaction(
+          transaction,
+          walletLedger.data.publicKey,
+          walletLedger.data.bipPath,
+        );
+      } else {
+        throw Error("Ledger transaction failed");
+      }
     } else if (settings.authType === AuthType.TREZOR) {
-      signedTransaction = await signTrezorTransaction(transaction, keyStore);
+      if (
+        walletTrezor.data &&
+        walletTrezor.data.publicKey &&
+        walletTrezor.data.bipPath
+      ) {
+        signedTransaction = await signTrezorTransaction(
+          transaction,
+          walletTrezor.data.publicKey,
+          walletTrezor.data.bipPath,
+        );
+      } else {
+        throw Error("Trezor transaction failed");
+      }
     } else {
       signedTransaction = await signTransaction({
         id: keyStore.keyStoreId,

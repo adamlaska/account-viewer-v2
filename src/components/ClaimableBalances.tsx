@@ -8,11 +8,12 @@ import {
   Table,
 } from "@stellar/design-system";
 import { NATIVE_ASSET_CODE } from "constants/settings";
+import { AppDispatch } from "config/store";
 import { fetchClaimableBalancesAction } from "ducks/claimableBalances";
 import { getNetworkConfig } from "helpers/getNetworkConfig";
 import { formatAmount } from "helpers/formatAmount";
 import { useRedux } from "hooks/useRedux";
-import { AssetType } from "types/types.d";
+import { AssetType } from "types/types";
 
 export const ClaimableBalances = () => {
   const { account, claimableBalances, settings } = useRedux(
@@ -21,7 +22,7 @@ export const ClaimableBalances = () => {
     "settings",
   );
   const accountId = account.data?.id;
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
 
   useEffect(() => {
     if (accountId) {

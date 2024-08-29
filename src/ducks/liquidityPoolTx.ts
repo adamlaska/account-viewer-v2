@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import StellarSdk from "stellar-sdk";
+import { Horizon } from "@stellar/stellar-sdk";
 import { RootState } from "config/store";
 import { TX_HISTORY_LIMIT } from "constants/settings";
 import { settingsSelector } from "ducks/settings";
@@ -11,7 +11,7 @@ import {
   RejectMessage,
   LiquidityPoolInitialState,
   LiquidityPoolAccountTransaction,
-} from "types/types.d";
+} from "types/types";
 
 export const fetchLiquidityPoolTxAction = createAsyncThunk<
   {
@@ -25,7 +25,7 @@ export const fetchLiquidityPoolTxAction = createAsyncThunk<
   async (publicKey, { rejectWithValue, getState }) => {
     const { isTestnet } = settingsSelector(getState());
     const networkConfig = getNetworkConfig(isTestnet);
-    const server = new StellarSdk.Server(networkConfig.url);
+    const server = new Horizon.Server(networkConfig.url);
 
     let data: LiquidityPoolAccountTransaction[] = [];
     let hasMoreTxs = false;

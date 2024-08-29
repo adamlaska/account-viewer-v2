@@ -6,6 +6,7 @@ module.exports = {
     "react/jsx-filename-extension": ["error", { extensions: [".tsx", ".jsx"] }],
     "no-plusplus": "off",
     "jsdoc/check-indentation": "off",
+    "jsdoc/newline-after-description": "off",
     "@typescript-eslint/naming-convention": [
       "error",
       {
@@ -15,5 +16,7 @@ module.exports = {
         trailingUnderscore: "allow",
       },
     ],
+    // TODO: fix this later
+    "@typescript-eslint/no-unsafe-argument": "off",
   },
 };
